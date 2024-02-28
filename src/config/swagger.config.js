@@ -23,11 +23,16 @@ export default {
       name: "User",
       description: "API for users",
     },
+    {
+      name: "Location",
+      description: "API for locations",
+    },
   ],
   apis: [
     "src/models/*.js",
     "src/utils/helpers/*.js",
     "src/api/controllers/user/*.js",
     "src/api/controllers/user/auth/*.js",
+    "src/api/controllers/location/*.js",
   ],
 };

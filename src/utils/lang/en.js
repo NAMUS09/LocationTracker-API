@@ -31,18 +31,11 @@ export default {
   "00040":
     "Please provide a password that is longer than 6 letters and shorter than 20 letters.",
   "00042": "An account with this email address was not found.",
-  "00043": "Your email is not activated, please register firstly.",
-  "00044": "Your email is not verified, please verify your email.",
   "00045": "You have entered an invalid email or password.",
   "00047": "You logged in successfully.",
-  "00048": "The code is sent to your email successfully.",
   "00050": "Successfully logged out.",
   "00052": "The user could not find.",
-  "00053": "Please send a verification code.",
-  "00054":
-    "The code you enter does not match with the code we sent to your email. Please check again.",
   "00055": "Invalid token. the token may have expired.",
-  "00058": "Your email address was verified successfully.",
   "00059": "Please provide refresh token.",
   "00061": "The provided token does not match with the user, please login.",
   "00062": "The token has expired, please login.",
@@ -61,7 +54,7 @@ export default {
     "Please provide a name that is longer than 3 letters and shorter than 30 letters.",
   "00078":
     "Valid gender options: female-male-other, plese provide one of them.",
-  "00079": "Valid language options: tr-en, plese provide one of them.",
+  "00079": "Valid language options: en, plese provide one of them.",
   "00080": "Please provide a valid birth date.",
   "00081":
     "Please provide a username that is longer than 3 letters and shorter than 15 letters.",
@@ -69,4 +62,5 @@ export default {
   "00086": "Your profile information was changed successfully.",
   "00089": "The user information has gotten successfully.",
   "00092": "Your account was deleted successfully.",
+  "00093": "All location history fetched successfully.",
 };
