@@ -1,5 +1,5 @@
 import { Location } from "../../../models/index.js";
-import { errorHelper } from "../../../utils/index.js";
+import { errorHelper, logger } from "../../../utils/index.js";
 
 export default async (req, res) => {
   const userId = req.user._id;
@@ -8,6 +8,8 @@ export default async (req, res) => {
     console.log(err.message);
     return res.status(500).json(errorHelper("00008", req, err.message));
   });
+
+  logger("00093", user._id, getText("en", "00093"), "Info", req);
 
   res.status(200).json({
     resultMessage: { en: getText("en", "00093") },
