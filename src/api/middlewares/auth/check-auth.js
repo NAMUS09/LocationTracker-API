@@ -7,11 +7,11 @@ import jwt from "jsonwebtoken";
 const { verify } = jwt;
 
 export default async (req, res, next) => {
-  let token = req.header("Authorization");
-  if (!token) return res.status(401).json(errorHelper("00006", req));
+  const token =
+    req.cookies?.accessToken ||
+    req.header("Authorization")?.replace("Bearer ", "");
 
-  if (token.includes("Bearer"))
-    token = req.header("Authorization").replace("Bearer ", "");
+  if (!token) return res.status(401).json(errorHelper("00006", req));
 
   try {
     req.user = verify(token, jwtSecretKey);
@@ -20,8 +20,6 @@ export default async (req, res, next) => {
 
     const exists = await User.exists({
       _id: req.user._id,
-      isVerified: true,
-      isActivated: true,
     }).catch((err) => {
       return res.status(500).json(errorHelper("00008", req, err.message));
     });

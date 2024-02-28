@@ -1,6 +1,11 @@
 import { User, Token } from "../../../../models/index.js";
 import { validateLogin } from "../../../validators/user.validator.js";
 import {
+  cookieAccessToken,
+  cookieOptions,
+  cookieRefreshToken,
+} from "../../../../config/index.js";
+import {
   errorHelper,
   getText,
   logger,
@@ -55,13 +60,17 @@ export default async (req, res) => {
   });
 
   logger("00047", user._id, getText("en", "00047"), "Info", req);
-  return res.status(200).json({
-    resultMessage: { en: getText("en", "00047") },
-    resultCode: "00047",
-    user,
-    accessToken,
-    refreshToken,
-  });
+  return res
+    .status(200)
+    .cookie(cookieAccessToken, accessToken, cookieOptions)
+    .cookie(cookieRefreshToken, refreshToken, cookieOptions)
+    .json({
+      resultMessage: { en: getText("en", "00047") },
+      resultCode: "00047",
+      user,
+      accessToken,
+      refreshToken,
+    });
 };
 
 /**

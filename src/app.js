@@ -11,7 +11,8 @@ app.listen(port, (err) => {
     console.log(err);
     return process.exit(1);
   }
-  console.log(`Server is running on ${port}`);
+
+  console.log(`[server]: Server is running at http://localhost:${port}`);
 });
 
 export default app;

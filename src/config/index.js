@@ -1,4 +1,9 @@
 export { default as swaggerConfig } from "./swagger.config.js";
+export {
+  cookieOptions,
+  cookieAccessToken,
+  cookieRefreshToken,
+} from "./cookie.config.js";
 import { config } from "dotenv";
 config();
 

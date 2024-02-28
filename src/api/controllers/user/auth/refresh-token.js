@@ -7,19 +7,29 @@ import {
   signAccessToken,
   signRefreshToken,
 } from "../../../../utils/index.js";
-import { refreshTokenSecretKey } from "../../../../config/index.js";
+import {
+  cookieOptions,
+  cookieAccessToken,
+  cookieRefreshToken,
+  refreshTokenSecretKey,
+} from "../../../../config/index.js";
 import pkg from "jsonwebtoken";
 const { verify } = pkg;
 
 export default async (req, res) => {
-  const { error } = validateRefreshToken(req.body);
+  const incomingRefreshToken =
+    req.cookies.refreshToken || req.body.refreshToken;
+
+  const { error } = validateRefreshToken({
+    refreshToken: incomingRefreshToken,
+  });
   if (error)
     return res
       .status(400)
       .json(errorHelper("00059", req, error.details[0].message));
 
   try {
-    req.user = verify(req.body.refreshToken, refreshTokenSecretKey);
+    req.user = verify(incomingRefreshToken, refreshTokenSecretKey);
   } catch (err) {
     return res.status(400).json(errorHelper("00063", req, err.message));
   }
@@ -30,7 +40,7 @@ export default async (req, res) => {
     }
   );
 
-  if (userToken.refreshToken !== req.body.refreshToken || !userToken)
+  if (userToken.refreshToken !== incomingRefreshToken || !userToken)
     return res.status(404).json(errorHelper("00061", req));
 
   if (userToken.expiresIn <= Date.now() || !userToken.status)
@@ -54,12 +64,16 @@ export default async (req, res) => {
     return res.status(500).json(errorHelper("00064", req, err.message));
   });
 
-  return res.status(200).json({
-    resultMessage: { en: getText("en", "00065") },
-    resultCode: "00065",
-    accessToken,
-    refreshToken,
-  });
+  return res
+    .status(200)
+    .cookie(cookieAccessToken, accessToken, cookieOptions)
+    .cookie(cookieRefreshToken, refreshToken, cookieOptions)
+    .json({
+      resultMessage: { en: getText("en", "00065") },
+      resultCode: "00065",
+      accessToken,
+      refreshToken,
+    });
 };
 
 /**

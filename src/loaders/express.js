@@ -3,11 +3,12 @@ import compression from "compression";
 import express from "express";
 import morgan from "morgan";
 import helmet from "helmet";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import { prefix } from "./../config/index.js";
 import routes from "./../api/routes/index.js";
 import { logger } from "../utils/index.js";
 import { jwtSecretKey } from "../config/index.js";
-import bodyParser from "body-parser";
 
 export default (app) => {
   process.on("uncaughtException", async (error) => {
@@ -33,6 +34,7 @@ export default (app) => {
   app.use(helmet());
   app.use(compression());
   app.use(express.static("public"));
+  app.use(cookieParser());
   app.disable("x-powered-by");
   app.disable("etag");
 
