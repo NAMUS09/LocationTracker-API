@@ -41,6 +41,8 @@ export default async (req, res) => {
  * /user/logout:
  *    post:
  *      summary: Logout the User
+ *      security:
+ *          - Authorization: []
  *      parameters:
  *        - in: header
  *          name: Authorization

@@ -63,4 +63,7 @@ export default {
   "00089": "The user information has gotten successfully.",
   "00092": "Your account was deleted successfully.",
   "00093": "All location history fetched successfully.",
+  "00094": "location saved successfully",
+  "00095": "Longitude is required",
+  "00096": "Latitide is requierd",
 };

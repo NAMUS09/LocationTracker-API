@@ -9,8 +9,13 @@ const router = Router();
 
 const specDoc = swaggerJsdoc(swaggerConfig);
 
-router.use(specs, serve);
-router.get(specs, setup(specDoc, { explorer: true }));
+router.use(
+  specs,
+  serve,
+  setup(specDoc, {
+    swaggerUrl: specs,
+  })
+);
 
 router.use("/user", user);
 router.use("/location", location);

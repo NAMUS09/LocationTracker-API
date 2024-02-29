@@ -17,6 +17,16 @@ export default {
         url: "http://localhost:3000/api/v1",
       },
     ],
+    components: {
+      securitySchemes: {
+        Authorization: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+          value: "Bearer <JWT token here>",
+        },
+      },
+    },
   },
   tags: [
     {
