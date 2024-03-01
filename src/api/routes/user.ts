@@ -10,10 +10,14 @@ import { auth } from "../middlewares/index.js";
 const router = Router();
 
 // AUTH
-router.post("/register", register);
-router.post("/login", login);
-router.post("/logout", auth as any, logout);
-router.post("/refresh-token", refreshToken);
+router.post("/register", register as unknown as RequestHandler);
+router.post("/login", login as unknown as RequestHandler);
+router.post(
+  "/logout",
+  auth as unknown as RequestHandler,
+  logout as unknown as RequestHandler
+);
+router.post("/refresh-token", refreshToken as unknown as RequestHandler);
 // router.post("/forgot-password", auth, forgotPassword);
 
 // EDIT

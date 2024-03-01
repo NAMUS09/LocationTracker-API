@@ -13,7 +13,7 @@ export default async (req: RequestWithUser, res: Response) => {
 
   logger("00093", req.user._id!, getText("en", "00093"), "Info", req);
 
-  res.status(200).json({
+  return res.status(200).json({
     resultMessage: { en: getText("en", "00093") },
     resultCode: "00093",
     locations,
