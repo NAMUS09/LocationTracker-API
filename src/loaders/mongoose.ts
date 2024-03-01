@@ -5,7 +5,7 @@ import { dbUri } from "../config/index.js";
 export default async () => {
   mongoose.set("strictQuery", false);
   await mongoose
-    .connect(dbUri, {})
+    .connect(dbUri!, {})
     .then(() => {
       console.log("Mongodb Connection");
     })

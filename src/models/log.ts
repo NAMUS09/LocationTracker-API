@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 const { Schema, model } = mongoose;
 
 /*NOTE: You can also choose to store logs in a file instead of DB because of speed problem.
@@ -6,6 +6,14 @@ const { Schema, model } = mongoose;
     If you consider speed and file size, you can store the logs in a  file.
     However, if you consider the query speed and fast access/read/process when you need, easiness to implement and 
     using logs to have some statistics about app/users, storing in DB is more efficient. */
+
+interface ILog extends Document {
+  userId: string;
+  resultCode: string;
+  level: string;
+  errorMessage: string;
+  ip: string;
+}
 
 const logSchema = new Schema(
   {
@@ -20,5 +28,5 @@ const logSchema = new Schema(
   }
 );
 
-const Log = model("Log", logSchema);
+const Log = model<ILog>("Log", logSchema);
 export default Log;

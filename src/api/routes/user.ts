@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { RequestHandler, Router } from "express";
 import {
   login,
   logout,
@@ -12,7 +12,7 @@ const router = Router();
 // AUTH
 router.post("/register", register);
 router.post("/login", login);
-router.post("/logout", auth, logout);
+router.post("/logout", auth as any, logout);
 router.post("/refresh-token", refreshToken);
 // router.post("/forgot-password", auth, forgotPassword);
 

@@ -1,5 +1,11 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 const { Schema, model } = mongoose;
+
+export interface ILocation extends Document {
+  userId: string;
+  latitude: string;
+  longitude: string;
+}
 
 const locationSchema = new Schema(
   {
@@ -22,7 +28,7 @@ const locationSchema = new Schema(
   }
 );
 
-const Location = model("Location", locationSchema);
+const Location = model<ILocation>("Location", locationSchema);
 
 export default Location;
 

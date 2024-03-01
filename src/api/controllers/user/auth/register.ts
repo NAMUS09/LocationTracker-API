@@ -1,5 +1,6 @@
 import { User } from "../../../../models/index.js";
 import { validateRegister } from "../../../validators/user.validator.js";
+import { Request, Response } from "express";
 import {
   errorHelper,
   logger,
@@ -7,9 +8,11 @@ import {
   generateRandomCode,
 } from "../../../../utils/index.js";
 import bcrypt from "bcryptjs";
+import RequestWithUser from "../../../../interfaces/requestWithUser.interface.js";
+
 const { hash } = bcrypt;
 
-export default async (req, res) => {
+export default async (req: RequestWithUser, res: Response) => {
   const { error } = validateRegister(req.body);
   if (error) {
     let code = "00025";
@@ -41,12 +44,13 @@ export default async (req, res) => {
   }
   do {
     username = tempName + generateRandomCode(4);
-    existsUsername = await User.exists({ username: username }).catch((err) => {
+    var findUser = await User.exists({ username: username }).catch((err) => {
       return res.status(500).json(errorHelper("00033", req, err.message));
     });
+    existsUsername = findUser !== null;
   } while (existsUsername);
 
-  let user = new User({
+  const user = new User({
     email: req.body.email,
     password: hashed,
     name: name,
@@ -55,18 +59,29 @@ export default async (req, res) => {
     lastLogin: Date.now(),
   });
 
-  user = await user.save().catch((err) => {
+  try {
+    const savedUser = await user.save();
+
+    const fetchUser = await User.findById({ _id: savedUser.id }).select(
+      "-password"
+    );
+    //savedUser.password = null;
+    logger(
+      "00035",
+      user._id as unknown as string,
+      getText("en", "00035"),
+      "Info",
+      req
+    );
+
+    return res.status(200).json({
+      resultMessage: { en: getText("en", "00035") },
+      resultCode: "00035",
+      fetchUser,
+    });
+  } catch (err) {
     return res.status(500).json(errorHelper("00034", req, err.message));
-  });
-
-  user.password = null;
-
-  logger("00035", user._id, getText("en", "00035"), "Info", req);
-  return res.status(200).json({
-    resultMessage: { en: getText("en", "00035") },
-    resultCode: "00035",
-    user,
-  });
+  }
 };
 
 /**

@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export function validateRegister(body) {
+export function validateRegister(body: any) {
   const schema = Joi.object({
     email: Joi.string().email().min(3).required(),
     password: Joi.string().min(6).max(20).required(),
@@ -10,7 +10,7 @@ export function validateRegister(body) {
   return schema.validate(body);
 }
 
-export function validateLogin(body) {
+export function validateLogin(body: any) {
   const schema = Joi.object({
     email: Joi.string().email().min(3).required(),
     password: Joi.string().min(6).max(20).required(),
@@ -18,14 +18,14 @@ export function validateLogin(body) {
   return schema.validate(body);
 }
 
-export function validateSendVerificationCode(body) {
+export function validateSendVerificationCode(body: any) {
   const schema = Joi.object({
     email: Joi.string().email().min(3).required(),
   });
   return schema.validate(body);
 }
 
-export function validateVerifyEmail(body) {
+export function validateVerifyEmail(body: any) {
   const schema = Joi.object({
     token: Joi.string().min(10).required(),
     code: Joi.string().length(4).required(),
@@ -33,21 +33,21 @@ export function validateVerifyEmail(body) {
   return schema.validate(body);
 }
 
-export function validateRefreshToken(body) {
+export function validateRefreshToken(body: { refreshToken: any }) {
   const schema = Joi.object({
     refreshToken: Joi.string().min(10).required(),
   });
   return schema.validate(body);
 }
 
-export function validateForgotPassword(body) {
+export function validateForgotPassword(body: any) {
   const schema = Joi.object({
     password: Joi.string().min(6).max(20).required(),
   });
   return schema.validate(body);
 }
 
-export function validateChangePassword(body) {
+export function validateChangePassword(body: any) {
   const schema = Joi.object({
     oldPassword: Joi.string().min(6).max(20).required(),
     newPassword: Joi.string().min(6).max(20).required(),
@@ -55,7 +55,7 @@ export function validateChangePassword(body) {
   return schema.validate(body);
 }
 
-export function validateEditUser(body) {
+export function validateEditUser(body: any) {
   const schema = Joi.object({
     name: Joi.string().min(3).max(24),
     username: Joi.string().min(3).max(15),

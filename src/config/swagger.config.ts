@@ -39,10 +39,10 @@ export default {
     },
   ],
   apis: [
-    "src/models/*.js",
-    "src/utils/helpers/*.js",
-    "src/api/controllers/user/*.js",
-    "src/api/controllers/user/auth/*.js",
-    "src/api/controllers/location/*.js",
+    "src/models/*.ts",
+    "src/utils/helpers/*.ts",
+    "src/api/controllers/user/*.ts",
+    "src/api/controllers/user/auth/*.ts",
+    "src/api/controllers/location/*.ts",
   ],
 };

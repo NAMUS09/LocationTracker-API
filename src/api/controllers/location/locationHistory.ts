@@ -1,7 +1,9 @@
+import RequestWithUser from "../../../interfaces/requestWithUser.interface.js";
 import { Location } from "../../../models/index.js";
-import { errorHelper, logger } from "../../../utils/index.js";
+import { errorHelper, getText, logger } from "../../../utils/index.js";
+import { Response } from "express";
 
-export default async (req, res) => {
+export default async (req: RequestWithUser, res: Response) => {
   const userId = req.user._id;
 
   var locations = await Location.find({ userId: userId }).catch((err) => {
@@ -9,7 +11,7 @@ export default async (req, res) => {
     return res.status(500).json(errorHelper("00008", req, err.message));
   });
 
-  logger("00093", user._id, getText("en", "00093"), "Info", req);
+  logger("00093", req.user._id!, getText("en", "00093"), "Info", req);
 
   res.status(200).json({
     resultMessage: { en: getText("en", "00093") },

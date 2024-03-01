@@ -1,12 +1,20 @@
+import pkg from "mongoose";
+import jwt from "jsonwebtoken";
 import { User, Token } from "../../../models/index.js";
 import { errorHelper } from "../../../utils/index.js";
 import { jwtSecretKey } from "../../../config/index.js";
-import pkg from "mongoose";
+import { Response, NextFunction } from "express";
+import { IUser } from "../../../models/user.js";
+import { RequestWithUser } from "../../../interfaces/index.js";
+
 const { Types } = pkg;
-import jwt from "jsonwebtoken";
 const { verify } = jwt;
 
-export default async (req, res, next) => {
+export default async (
+  req: RequestWithUser,
+  res: Response,
+  next: NextFunction
+) => {
   const token =
     req.cookies?.accessToken ||
     req.header("Authorization")?.replace("Bearer ", "");
@@ -14,7 +22,7 @@ export default async (req, res, next) => {
   if (!token) return res.status(401).json(errorHelper("00006", req));
 
   try {
-    req.user = verify(token, jwtSecretKey);
+    req.user = verify(token, jwtSecretKey!) as IUser;
     if (!Types.ObjectId.isValid(req.user._id))
       return res.status(400).json(errorHelper("00007", req));
 

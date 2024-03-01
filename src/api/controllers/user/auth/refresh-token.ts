@@ -14,9 +14,13 @@ import {
   refreshTokenSecretKey,
 } from "../../../../config/index.js";
 import pkg from "jsonwebtoken";
+import { Response } from "express";
+import { IUser } from "../../../../models/user.js";
+import { IToken } from "../../../../models/token.js";
+import { RequestWithUser } from "../../../../interfaces/index";
 const { verify } = pkg;
 
-export default async (req, res) => {
+export default async (req: RequestWithUser, res: Response) => {
   const incomingRefreshToken =
     req.cookies.refreshToken || req.body.refreshToken;
 
@@ -29,51 +33,45 @@ export default async (req, res) => {
       .json(errorHelper("00059", req, error.details[0].message));
 
   try {
-    req.user = verify(incomingRefreshToken, refreshTokenSecretKey);
+    req.user = verify(incomingRefreshToken, refreshTokenSecretKey) as IUser;
+
+    const userToken = (await Token.findOne({ userId: req.user._id })) as IToken;
+
+    if (userToken.refreshToken !== incomingRefreshToken || !userToken)
+      return res.status(404).json(errorHelper("00061", req));
+
+    if (userToken.expiresIn <= Date.now() || !userToken.status)
+      return res.status(400).json(errorHelper("00062", req));
+
+    const accessToken = signAccessToken(req.user._id!);
+    const refreshToken = signRefreshToken(req.user._id!);
+
+    await Token.updateOne(
+      { userId: req.user._id },
+      {
+        $set: {
+          refreshToken: refreshToken,
+          createdByIp: ipHelper(req),
+          createdAt: Date.now(),
+          expires: Date.now() + 604800000,
+          status: true,
+        },
+      }
+    );
+
+    return res
+      .status(200)
+      .cookie(cookieAccessToken, accessToken, cookieOptions)
+      .cookie(cookieRefreshToken, refreshToken, cookieOptions)
+      .json({
+        resultMessage: { en: getText("en", "00065") },
+        resultCode: "00065",
+        accessToken,
+        refreshToken,
+      });
   } catch (err) {
     return res.status(400).json(errorHelper("00063", req, err.message));
   }
-
-  const userToken = await Token.findOne({ userId: req.user._id }).catch(
-    (err) => {
-      return res.status(500).json(errorHelper("00060", req, err.message));
-    }
-  );
-
-  if (userToken.refreshToken !== incomingRefreshToken || !userToken)
-    return res.status(404).json(errorHelper("00061", req));
-
-  if (userToken.expiresIn <= Date.now() || !userToken.status)
-    return res.status(400).json(errorHelper("00062", req));
-
-  const accessToken = signAccessToken(req.user._id);
-  const refreshToken = signRefreshToken(req.user._id);
-
-  await Token.updateOne(
-    { userId: req.user._id },
-    {
-      $set: {
-        refreshToken: refreshToken,
-        createdByIp: ipHelper(req),
-        createdAt: Date.now(),
-        expires: Date.now() + 604800000,
-        status: true,
-      },
-    }
-  ).catch((err) => {
-    return res.status(500).json(errorHelper("00064", req, err.message));
-  });
-
-  return res
-    .status(200)
-    .cookie(cookieAccessToken, accessToken, cookieOptions)
-    .cookie(cookieRefreshToken, refreshToken, cookieOptions)
-    .json({
-      resultMessage: { en: getText("en", "00065") },
-      resultCode: "00065",
-      accessToken,
-      refreshToken,
-    });
 };
 
 /**

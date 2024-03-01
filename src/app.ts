@@ -6,10 +6,10 @@ const app = express();
 
 loader(app);
 
-app.listen(port, (err) => {
+app.listen(port, (err?: Error) => {
   if (err) {
-    console.log(err);
-    return process.exit(1);
+    console.error(err);
+    process.exit(1);
   }
 
   console.log(`[server]: Server is running at http://localhost:${port}`);

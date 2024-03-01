@@ -1,22 +1,23 @@
 import cors from "cors";
 import compression from "compression";
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import { prefix } from "./../config/index.js";
-import routes from "./../api/routes/index.js";
+import { prefix } from "../config/index.js";
+import routes from "../api/routes/index.js";
 import { logger } from "../utils/index.js";
 import { jwtSecretKey } from "../config/index.js";
+import { CustomError, RequestWithUser } from "../interfaces/index.js";
 
 export default (app) => {
-  process.on("uncaughtException", async (error) => {
+  process.on("uncaughtException", async (error: Error) => {
     // console.log(error);
     logger("00001", "", error.message, "Uncaught Exception", "");
   });
 
-  process.on("unhandledRejection", async (ex) => {
+  process.on("unhandledRejection", async (ex: Error) => {
     // console.log(ex);
     logger("00002", "", ex.message, "Unhandled Rejection", "");
   });
@@ -66,29 +67,36 @@ export default (app) => {
     next();
   });
 
-  app.use((_req, _res, next) => {
-    const error = new Error("Endpoint could not find!");
+  app.use((_req: Request, _res: Response, next: NextFunction) => {
+    const error = new Error("Endpoint could not find!") as CustomError;
     error.status = 404;
     next(error);
   });
 
-  app.use((error, req, res, _next) => {
-    res.status(error.status || 500);
-    let resultCode = "00015";
-    let level = "External Error";
-    if (error.status === 500) {
-      resultCode = "00013";
-      level = "Server Error";
-    } else if (error.status === 404) {
-      resultCode = "00014";
-      level = "Client Error";
+  app.use(
+    (
+      error: CustomError,
+      req: RequestWithUser,
+      res: Response,
+      _next: NextFunction
+    ) => {
+      res.status(error.status || 500);
+      let resultCode = "00015";
+      let level = "External Error";
+      if (error.status === 500) {
+        resultCode = "00013";
+        level = "Server Error";
+      } else if (error.status === 404) {
+        resultCode = "00014";
+        level = "Client Error";
+      }
+      logger(resultCode, req?.user?._id ?? "", error.message, level, req);
+      return res.json({
+        resultMessage: {
+          en: error.message,
+        },
+        resultCode: resultCode,
+      });
     }
-    logger(resultCode, req?.user?._id ?? "", error.message, level, req);
-    return res.json({
-      resultMessage: {
-        en: error.message,
-      },
-      resultCode: resultCode,
-    });
-  });
+  );
 };

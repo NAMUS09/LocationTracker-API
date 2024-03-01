@@ -1,5 +1,17 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Model } from "mongoose";
 const { Schema, model } = mongoose;
+
+export interface IUser extends Document {
+  _id?: string;
+  email: string;
+  password: string;
+  username?: string;
+  name: string;
+  language: "en";
+  gender?: "male" | "female" | "other";
+  birthDate?: Date;
+  lastLogin?: number;
+}
 
 const userSchema = new Schema(
   {

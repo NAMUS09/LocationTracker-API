@@ -8,7 +8,7 @@ import { auth } from "../middlewares/index.js";
 const router = Router();
 
 // Protected Routes
-router.get("/location-history", auth, locationHistory);
-router.post("/save-location", auth, saveLocation);
+router.get("/location-history", auth as any, locationHistory);
+router.post("/save-location", auth as any, saveLocation);
 
 export default router;

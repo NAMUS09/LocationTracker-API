@@ -1,8 +1,10 @@
+import RequestWithUser from "../../../interfaces/requestWithUser.interface.js";
 import { Location } from "../../../models/index.js";
-import { errorHelper, logger } from "../../../utils/index.js";
+import { errorHelper, getText, logger } from "../../../utils/index.js";
 import { validateLocation } from "../../validators/location.validator.js";
+import { Response } from "express";
 
-export default async (req, res) => {
+export default async (req: RequestWithUser, res: Response) => {
   const { error } = validateLocation(req.body);
   if (error) {
     const code = error.details[0].message.includes("longitude")
@@ -13,22 +15,24 @@ export default async (req, res) => {
       .json(errorHelper(code, req, error.details[0].message));
   }
 
-  let location = new Location({
-    userId: req.user._id,
-    longitude: req.body.longitude,
-    latitude: req.body.latitude,
-  });
+  try {
+    const location = new Location({
+      userId: req.user._id,
+      longitude: req.body.longitude,
+      latitude: req.body.latitude,
+    });
 
-  location = await location.save().catch((err) => {
-    return res.status(500).json(errorHelper("00008", req, err.message));
-  });
+    await location.save();
 
-  logger("00093", user._id, getText("en", "00094"), "Info", req);
+    logger("00093", req.user._id!, getText("en", "00094"), "Info", req);
 
-  res.status(200).json({
-    resultMessage: { en: getText("en", "00094") },
-    resultCode: "00094",
-  });
+    res.status(200).json({
+      resultMessage: { en: getText("en", "00094") },
+      resultCode: "00094",
+    });
+  } catch (error) {
+    return res.status(500).json(errorHelper("00008", req, error.message));
+  }
 };
 
 /**

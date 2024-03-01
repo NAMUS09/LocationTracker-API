@@ -1,5 +1,13 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 const { Schema, model } = mongoose;
+
+export interface IToken extends Document {
+  userId: string;
+  refreshToken: string;
+  expiresIn: number;
+  createdByIp: string;
+  status: boolean;
+}
 
 const tokenSchema = new Schema(
   {
@@ -14,6 +22,6 @@ const tokenSchema = new Schema(
   }
 );
 
-const Token = model("Token", tokenSchema);
+const Token = model<IToken>("Token", tokenSchema);
 
 export default Token;
