@@ -23,7 +23,7 @@ export default async (
 
   try {
     req.user = verify(token, jwtSecretKey!) as IUser;
-    if (!Types.ObjectId.isValid(req.user._id))
+    if (!Types.ObjectId.isValid(req.user._id!))
       return res.status(400).json(errorHelper("00007", req));
 
     const exists = await User.exists({

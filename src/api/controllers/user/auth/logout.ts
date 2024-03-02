@@ -39,16 +39,10 @@ export default async (req: RequestWithUser, res: Response) => {
 /**
  * @swagger
  * /user/logout:
- *    post:
+ *    get:
  *      summary: Logout the User
  *      security:
  *          - Authorization: []
- *      parameters:
- *        - in: header
- *          name: Authorization
- *          schema:
- *            type: string
- *          description: Put access token here
  *      tags:
  *        - User
  *      responses:

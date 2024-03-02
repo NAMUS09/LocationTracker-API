@@ -1,17 +1,19 @@
 import cors from "cors";
 import compression from "compression";
+import bodyParser from "body-parser";
 import express, { Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import helmet from "helmet";
-import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import { prefix } from "../config/index.js";
+import { appOrigin, corsOptions, prefix } from "../config/index.js";
 import routes from "../api/routes/index.js";
 import { logger } from "../utils/index.js";
 import { jwtSecretKey } from "../config/index.js";
 import { CustomError, RequestWithUser } from "../interfaces/index.js";
+import { Express } from "express";
+import errorHandler from "../middlewares/error.js";
 
-export default (app) => {
+export default (app: Express) => {
   process.on("uncaughtException", async (error: Error) => {
     // console.log(error);
     logger("00001", "", error.message, "Uncaught Exception", "");
@@ -28,7 +30,7 @@ export default (app) => {
   }
 
   app.enable("trust proxy");
-  app.use(cors());
+  app.use(cors(corsOptions));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(morgan("dev"));
@@ -41,7 +43,7 @@ export default (app) => {
 
   app.use(prefix, routes);
 
-  app.get("/", (_req, res) => {
+  app.get("/", (_req: Request, res: Response) => {
     return res
       .status(200)
       .json({
@@ -53,13 +55,17 @@ export default (app) => {
       .end();
   });
 
-  app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    res.header("Access-Control-Allow-Origin", appOrigin);
     res.header(
       "Access-Control-Allow-Headers",
       "Origin, X-Requested-With, Content-Type, Accept, Authorization"
     );
     res.header("Content-Security-Policy-Report-Only", "default-src: https:");
+
+    // Set Access-Control-Allow-Credentials to true
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+
     if (req.method === "OPTIONS") {
       res.header("Access-Control-Allow-Methods", "PUT POST PATCH DELETE GET");
       return res.status(200).json({});
@@ -73,30 +79,6 @@ export default (app) => {
     next(error);
   });
 
-  app.use(
-    (
-      error: CustomError,
-      req: RequestWithUser,
-      res: Response,
-      _next: NextFunction
-    ) => {
-      res.status(error.status || 500);
-      let resultCode = "00015";
-      let level = "External Error";
-      if (error.status === 500) {
-        resultCode = "00013";
-        level = "Server Error";
-      } else if (error.status === 404) {
-        resultCode = "00014";
-        level = "Client Error";
-      }
-      logger(resultCode, req?.user?._id ?? "", error.message, level, req);
-      return res.json({
-        resultMessage: {
-          en: error.message,
-        },
-        resultCode: resultCode,
-      });
-    }
-  );
+  // Error handling
+  app.use(errorHandler);
 };
