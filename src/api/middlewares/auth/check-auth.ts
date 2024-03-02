@@ -4,7 +4,7 @@ import { User, Token } from "../../../models/index.js";
 import { errorHelper } from "../../../utils/index.js";
 import { jwtSecretKey } from "../../../config/index.js";
 import { Response, NextFunction } from "express";
-import { IUser } from "../../../models/user.js";
+import { IUser } from "../../../models/user.model.js";
 import { RequestWithUser } from "../../../interfaces/index.js";
 
 const { Types } = pkg;

@@ -9,14 +9,11 @@ import {
   errorHelper,
   getText,
   logger,
-  signAccessToken,
-  signRefreshToken,
+  generateAccessAndRefereshTokens,
 } from "../../../../utils/index.js";
-import bcrypt from "bcryptjs";
 import RequestWithUser from "../../../../interfaces/requestWithUser.interface.js";
 import { Response } from "express";
-import { IUser } from "../../../../models/user.js";
-const { compare } = bcrypt;
+import { IUser } from "../../../../models/user.model.js";
 
 export default async (req: RequestWithUser, res: Response) => {
   const { error } = validateLogin(req.body);
@@ -31,18 +28,28 @@ export default async (req: RequestWithUser, res: Response) => {
   }
 
   try {
+    const { email, password } = req.body;
     const user = (await User.findOne({
-      email: req.body.email,
+      email,
     }).select("+password")) as IUser;
 
     if (!user || !user._id)
       return res.status(404).json(errorHelper("00042", req));
 
-    const match = await compare(req.body.password, user.password);
-    if (!match) return res.status(400).json(errorHelper("00045", req));
+    const isPasswordValid = await user.isPasswordCorrect(password);
+    if (!isPasswordValid)
+      return res.status(400).json(errorHelper("00045", req));
 
-    const accessToken = signAccessToken(user._id);
-    const refreshToken = signRefreshToken(user._id);
+    const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
+      user._id
+    );
+
+    // update lastlogin date
+    await User.updateOne(
+      { userId: user._id },
+      { $set: { lastLoginDate: Date.now() } }
+    );
+
     //NOTE: 604800000 ms is equal to 7 days. So, the expiry date of the token is 7 days after.
     await Token.updateOne(
       { userId: user._id },

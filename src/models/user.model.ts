@@ -1,4 +1,13 @@
-import mongoose, { Document, Model } from "mongoose";
+import mongoose, { Document } from "mongoose";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import {
+  accessTokenExpiry,
+  jwtSecretKey,
+  refreshTokenExpiry,
+  refreshTokenSecretKey,
+} from "../config";
+
 const { Schema, model } = mongoose;
 
 export interface IUser extends Document {
@@ -10,7 +19,10 @@ export interface IUser extends Document {
   language: "en";
   gender?: "male" | "female" | "other";
   birthDate?: Date;
-  lastLogin?: number;
+  lastLoginDate?: number;
+  isPasswordCorrect(password: any): Promise<boolean>;
+  generateAccessToken(): unknown;
+  generateRefreshToken(): unknown;
 }
 
 const userSchema = new Schema(
@@ -51,6 +63,9 @@ const userSchema = new Schema(
     birthDate: {
       type: Date,
     },
+    lastLoginDate: {
+      type: Date,
+    },
     //NOTE: In case the user delete its account, you can store its non-personalized information anonymously.
     deletedAt: {
       type: Date,
@@ -60,6 +75,43 @@ const userSchema = new Schema(
     timestamps: true,
   }
 );
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
+
+userSchema.methods.isPasswordCorrect = async function (password: string) {
+  return await bcrypt.compare(password, this.password);
+};
+
+userSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+      email: this.email,
+      username: this.username,
+    },
+    jwtSecretKey,
+    {
+      expiresIn: accessTokenExpiry,
+    }
+  );
+};
+
+userSchema.methods.generateRefreshToken = function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+    },
+    refreshTokenSecretKey,
+    {
+      expiresIn: refreshTokenExpiry,
+    }
+  );
+};
 
 const User = model("User", userSchema);
 export default User;

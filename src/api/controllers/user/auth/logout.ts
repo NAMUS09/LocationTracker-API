@@ -12,14 +12,10 @@ export default async (req: RequestWithUser, res: Response) => {
   await Token.updateOne(
     { userId: req.user._id },
     {
-      $unset: {
-        refreshToken: 1, // this removes the field from document
-      },
-    },
-    {
+      $unset: { refreshToken: 1 },
       $set: { status: false, expiresIn: Date.now() },
-      new: true,
-    }
+    },
+    { new: true }
   ).catch((err) => {
     return res.status(500).json(errorHelper("00049", req, err.message));
   });

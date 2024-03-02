@@ -1,16 +1,13 @@
 import { User } from "../../../../models/index.js";
 import { validateRegister } from "../../../validators/user.validator.js";
-import { Request, Response } from "express";
+import { Response } from "express";
 import {
   errorHelper,
   logger,
   getText,
   generateRandomCode,
 } from "../../../../utils/index.js";
-import bcrypt from "bcryptjs";
 import RequestWithUser from "../../../../interfaces/requestWithUser.interface.js";
-
-const { hash } = bcrypt;
 
 export default async (req: RequestWithUser, res: Response) => {
   const { error } = validateRegister(req.body);
@@ -31,17 +28,18 @@ export default async (req: RequestWithUser, res: Response) => {
 
   if (exists) return res.status(409).json(errorHelper("00032", req));
 
-  const hashed = await hash(req.body.password, 10);
+  const { name, email, password, language } = req.body;
 
   let username = "";
   let tempName = "";
   let existsUsername = true;
-  let name = req.body.name;
+
   if (name.includes(" ")) {
     tempName = name.trim().split(" ").slice(0, 1).join("").toLowerCase();
   } else {
     tempName = name.toLowerCase().trim();
   }
+
   do {
     username = tempName + generateRandomCode(4);
     var findUser = await User.exists({ username: username }).catch((err) => {
@@ -51,12 +49,12 @@ export default async (req: RequestWithUser, res: Response) => {
   } while (existsUsername);
 
   const user = new User({
-    email: req.body.email,
-    password: hashed,
-    name: name,
-    username: username,
-    language: req.body.language,
-    lastLogin: Date.now(),
+    email,
+    password,
+    name,
+    username,
+    language,
+    lastLoginDate: Date.now(),
   });
 
   try {

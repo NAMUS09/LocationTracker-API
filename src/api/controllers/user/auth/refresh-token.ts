@@ -4,8 +4,7 @@ import {
   errorHelper,
   getText,
   ipHelper,
-  signAccessToken,
-  signRefreshToken,
+  generateAccessAndRefereshTokens,
 } from "../../../../utils/index.js";
 import {
   cookieOptions,
@@ -15,8 +14,8 @@ import {
 } from "../../../../config/index.js";
 import pkg from "jsonwebtoken";
 import { Response } from "express";
-import { IUser } from "../../../../models/user.js";
-import { IToken } from "../../../../models/token.js";
+import { IUser } from "../../../../models/user.model.js";
+import { IToken } from "../../../../models/token.model.js";
 import { RequestWithUser } from "../../../../interfaces/index";
 const { verify } = pkg;
 
@@ -43,8 +42,9 @@ export default async (req: RequestWithUser, res: Response) => {
     if (userToken.expiresIn <= Date.now() || !userToken.status)
       return res.status(400).json(errorHelper("00062", req));
 
-    const accessToken = signAccessToken(req.user._id!);
-    const refreshToken = signRefreshToken(req.user._id!);
+    const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
+      req.user._id!
+    );
 
     await Token.updateOne(
       { userId: req.user._id },
