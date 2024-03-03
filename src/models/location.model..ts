@@ -3,8 +3,12 @@ const { Schema, model } = mongoose;
 
 export interface ILocation extends Document {
   userId: string;
-  latitude: string;
-  longitude: string;
+  accuracy?: number | null;
+  altitude?: number | null;
+  altitudeAccuracy?: number | null;
+  heading?: number | null;
+  latitude: number;
+  longitude: number;
 }
 
 const locationSchema = new Schema(
@@ -14,6 +18,16 @@ const locationSchema = new Schema(
       ref: "User",
       required: true,
     },
+    accuracy: {
+      type: Number,
+    },
+    altitude: {
+      type: Number,
+    },
+    altitudeAccuracy: {
+      type: Number,
+    },
+    heading: { type: Number },
     latitude: {
       type: Number,
       required: true,
@@ -39,17 +53,18 @@ export default Location;
  *     Location:
  *       type: object
  *       properties:
- *         userId:
- *           type: string
- *           description: The ID of the user associated with the location.
+ *         accuracy:
+ *           type: number
+ *         altitude:
+ *           type: number
+ *         altitudeAccuracy:
+ *           type: number
+ *         heading:
+ *           type: number
  *         latitude:
  *           type: number
  *           description: The latitude coordinate of the location.
  *         longitude:
  *           type: number
  *           description: The longitude coordinate of the location.
- *         timestamp:
- *           type: string
- *           format: date-time
- *           description: The timestamp when the location was recorded.
  */

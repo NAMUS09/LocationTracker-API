@@ -1,5 +1,6 @@
 import RequestWithUser from "../../../interfaces/requestWithUser.interface.js";
 import { Location } from "../../../models/index.js";
+import { ILocation } from "../../../models/location.model..js";
 import { errorHelper, getText, logger } from "../../../utils/index.js";
 import { validateLocation } from "../../validators/location.validator.js";
 import { Response } from "express";
@@ -16,10 +17,23 @@ export default async (req: RequestWithUser, res: Response) => {
   }
 
   try {
+    const {
+      longitude,
+      latitude,
+      accuracy,
+      altitude,
+      altitudeAccuracy,
+      heading,
+    } = req.body as ILocation;
+
     const location = new Location({
       userId: req.user._id,
-      longitude: req.body.longitude,
-      latitude: req.body.latitude,
+      accuracy,
+      altitude,
+      altitudeAccuracy,
+      longitude,
+      latitude,
+      heading,
     });
 
     await location.save();
@@ -52,8 +66,26 @@ export default async (req: RequestWithUser, res: Response) => {
  *              properties:
  *                longitude:
  *                  type: string
+ *                  required: true
  *                latitude:
  *                  type: string
+ *                  required: true
+ *                accuracy:
+ *                  type: number
+ *                  nullable: true
+ *                  default: null
+ *                altitude:
+ *                  type: number
+ *                  nullable: true
+ *                  default: null
+ *                altitudeAccuracy:
+ *                  type: number
+ *                  nullable: true
+ *                  default: null
+ *                heading:
+ *                  type: number
+ *                  nullable: true
+ *                  default: null
  *      tags:
  *        - Location
  *      responses:
