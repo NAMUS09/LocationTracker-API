@@ -13,7 +13,7 @@ export default async (
   if (req && req !== null && typeof req !== "undefined") {
     ip = ipHelper(req);
   }
-  ip = ipHelper(req);
+
   let log = new Log({
     resultCode: code,
     level: level,

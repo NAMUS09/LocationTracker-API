@@ -10,7 +10,6 @@ export default async (req: RequestWithUser, res: Response) => {
     { userId: userId },
     "-__v -userId -updatedAt"
   ).catch((err) => {
-    console.log(err.message);
     return res.status(500).json(errorHelper("00008", req, err.message));
   });
 

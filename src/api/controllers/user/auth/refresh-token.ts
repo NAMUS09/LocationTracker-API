@@ -5,6 +5,7 @@ import {
   getText,
   ipHelper,
   generateAccessAndRefereshTokens,
+  removeToken,
 } from "../../../../utils/index.js";
 import {
   cookieOptions,
@@ -17,30 +18,40 @@ import { Response } from "express";
 import { IUser } from "../../../../models/user.model.js";
 import { IToken } from "../../../../models/token.model.js";
 import { RequestWithUser } from "../../../../interfaces/index";
+import {
+  cookieClient,
+  cookieClientOptions,
+} from "../../../../config/cookie.config.js";
+
 const { verify } = pkg;
 
 export default async (req: RequestWithUser, res: Response) => {
-  const incomingRefreshToken =
-    req.cookies.refreshToken || req.body.refreshToken;
-
-  const { error } = validateRefreshToken({
-    refreshToken: incomingRefreshToken,
-  });
-  if (error)
-    return res
-      .status(400)
-      .json(errorHelper("00059", req, error.details[0].message));
-
   try {
+    const incomingRefreshToken =
+      req.cookies.refreshToken || req.body.refreshToken;
+
+    const { error } = validateRefreshToken({
+      refreshToken: incomingRefreshToken,
+    });
+
+    if (error) {
+      errorHelper("00059", req, error.details[0].message);
+      throw new Error(`${error.details[0].message}`);
+    }
+
     req.user = verify(incomingRefreshToken, refreshTokenSecretKey) as IUser;
 
     const userToken = (await Token.findOne({ userId: req.user._id })) as IToken;
 
-    if (userToken.refreshToken !== incomingRefreshToken || !userToken)
-      return res.status(404).json(errorHelper("00061", req));
+    if (!userToken || userToken.refreshToken !== incomingRefreshToken) {
+      errorHelper("00061", req);
+      throw new Error(getText("en", "00061"));
+    }
 
-    if (userToken.expiresIn <= Date.now() || !userToken.status)
-      return res.status(400).json(errorHelper("00062", req));
+    if (userToken.expiresIn <= Date.now() || !userToken.status) {
+      errorHelper("00062", req);
+      throw new Error(getText("en", "00062"));
+    }
 
     const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
       req.user._id!
@@ -70,7 +81,14 @@ export default async (req: RequestWithUser, res: Response) => {
         refreshToken,
       });
   } catch (err) {
-    return res.status(400).json(errorHelper("00063", req, err.message));
+    if (req.user._id) await removeToken(req.user._id);
+
+    return res
+      .status(401)
+      .clearCookie(cookieAccessToken, cookieOptions)
+      .clearCookie(cookieRefreshToken, cookieOptions)
+      .clearCookie(cookieClient, cookieClientOptions)
+      .json(errorHelper("00063", req, err.message));
   }
 };
 

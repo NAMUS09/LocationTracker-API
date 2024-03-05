@@ -11,7 +11,7 @@ import {
 const { Schema, model } = mongoose;
 
 export interface IUser extends Document {
-  _id?: string;
+  _id: string;
   email: string;
   password: string;
   username?: string;

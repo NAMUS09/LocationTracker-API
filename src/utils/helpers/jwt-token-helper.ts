@@ -1,5 +1,5 @@
 import { Error } from "mongoose";
-import { User } from "../../models";
+import { Token, User } from "../../models";
 import { IUser } from "../../models/user.model";
 import logger from "../logger";
 
@@ -16,4 +16,22 @@ const generateAccessAndRefereshTokens = async (userId: string) => {
   }
 };
 
-export default generateAccessAndRefereshTokens;
+const removeToken = async (userId: string) => {
+  try {
+    await Token.updateOne(
+      { userId: userId },
+      {
+        $unset: { refreshToken: 1 },
+        $set: { status: false, expiresIn: Date.now() },
+      },
+      { new: true }
+    );
+
+    return true;
+  } catch (error) {
+    logger("00003", "", error.message, "Uncaught Exception", "");
+    throw new Error("Failed to remove tokens");
+  }
+};
+
+export { generateAccessAndRefereshTokens, removeToken };

@@ -14,6 +14,10 @@ import {
 import RequestWithUser from "../../../../interfaces/requestWithUser.interface.js";
 import { Response } from "express";
 import { IUser } from "../../../../models/user.model.js";
+import {
+  cookieClient,
+  cookieClientOptions,
+} from "../../../../config/cookie.config.js";
 
 export default async (req: RequestWithUser, res: Response) => {
   const { error } = validateLogin(req.body);
@@ -68,10 +72,14 @@ export default async (req: RequestWithUser, res: Response) => {
     });
 
     logger("00047", user._id, getText("en", "00047"), "Info", req);
+
+    const cookieClientValues = { _id: user._id, email };
+
     return res
       .status(200)
       .cookie(cookieAccessToken, accessToken, cookieOptions)
       .cookie(cookieRefreshToken, refreshToken, cookieOptions)
+      .cookie(cookieClient, cookieClientValues, cookieClientOptions)
       .json({
         resultMessage: { en: getText("en", "00047") },
         resultCode: "00047",

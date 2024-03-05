@@ -1,31 +1,28 @@
 import {
   cookieAccessToken,
+  cookieClient,
+  cookieClientOptions,
   cookieOptions,
   cookieRefreshToken,
 } from "../../../../config/cookie.config.js";
 import RequestWithUser from "../../../../interfaces/requestWithUser.interface.js";
-import { Token } from "../../../../models/index.js";
-import { errorHelper, getText, logger } from "../../../../utils/index.js";
+
+import { getText, logger, removeToken } from "../../../../utils/index.js";
 import { Response } from "express";
 
 export default async (req: RequestWithUser, res: Response) => {
-  await Token.updateOne(
-    { userId: req.user._id },
-    {
-      $unset: { refreshToken: 1 },
-      $set: { status: false, expiresIn: Date.now() },
-    },
-    { new: true }
-  ).catch((err) => {
-    return res.status(500).json(errorHelper("00049", req, err.message));
-  });
+  const userId = req.user._id;
 
-  logger("00050", req.user._id!, getText("en", "00050"), "Info", req);
+  //remove token
+  await removeToken(userId);
+
+  logger("00050", userId, getText("en", "00050"), "Info", req);
 
   return res
     .status(200)
     .clearCookie(cookieAccessToken, cookieOptions)
     .clearCookie(cookieRefreshToken, cookieOptions)
+    .clearCookie(cookieClient, cookieClientOptions)
     .json({
       resultMessage: { en: getText("en", "00050") },
       resultCode: "00050",
