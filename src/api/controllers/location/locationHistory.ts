@@ -4,22 +4,43 @@ import { errorHelper, getText, logger } from "../../../utils/index.js";
 import { Response } from "express";
 
 export default async (req: RequestWithUser, res: Response) => {
-  const userId = req.user._id;
+  try {
+    const userId = req.user._id;
 
-  var locations = await Location.find(
-    { userId: userId },
-    "-__v -userId -updatedAt"
-  ).catch((err) => {
-    return res.status(500).json(errorHelper("00008", req, err.message));
-  });
+    // var locations = await Location.find(
+    //   { userId: userId },
+    //   "-__v -userId -updatedAt"
+    // ).sort({ _id: -1 });
 
-  logger("00093", req.user._id!, getText("en", "00093"), "Info", req);
+    const locations = await Location.aggregate([
+      { $match: { userId: userId } },
+      { $sort: { _id: -1 } },
+      { $limit: 5 },
+      {
+        $addFields: {
+          CapturedOn: { $toDate: "$createdAt" },
+        },
+      },
+      {
+        $project: {
+          userId: 0,
+          updatedAt: 0,
+          __v: 0,
+          createdAt: 0,
+        },
+      },
+    ]);
 
-  return res.status(200).json({
-    resultMessage: { en: getText("en", "00093") },
-    resultCode: "00093",
-    locations,
-  });
+    logger("00093", req.user._id!, getText("en", "00093"), "Info", req);
+
+    return res.status(200).json({
+      resultMessage: { en: getText("en", "00093") },
+      resultCode: "00093",
+      locations,
+    });
+  } catch (error) {
+    return res.status(500).json(errorHelper("00008", req, error.message));
+  }
 };
 
 /**
