@@ -73,7 +73,9 @@ export default async (req: RequestWithUser, res: Response) => {
 
     logger("00047", user._id, getText("en", "00047"), "Info", req);
 
-    const cookieClientValues = { _id: user._id, email };
+    const loggedInUser = await User.findById(user._id).select("-password");
+
+    const cookieClientValues = { _id: user._id, email, name: user.name };
 
     return res
       .status(200)
@@ -83,7 +85,7 @@ export default async (req: RequestWithUser, res: Response) => {
       .json({
         resultMessage: { en: getText("en", "00047") },
         resultCode: "00047",
-        user,
+        user: loggedInUser,
         accessToken,
         refreshToken,
       });

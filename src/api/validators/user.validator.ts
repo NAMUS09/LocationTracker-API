@@ -4,6 +4,7 @@ export function validateRegister(body: any) {
   const schema = Joi.object({
     email: Joi.string().email().min(3).required(),
     password: Joi.string().min(6).max(20).required(),
+    confirmPassword: Joi.string().min(6).max(20).required(),
     name: Joi.string().min(3).max(24).required(),
     language: Joi.string().valid("en").required(),
   });
