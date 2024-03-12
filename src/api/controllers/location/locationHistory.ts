@@ -13,6 +13,10 @@ export default async (req: RequestWithUser, res: Response) => {
     page ??= 1;
     const skip = (page - 1) * limit; // Calculate the offset based on the current page
 
+    const totalLocations = await Location.find({ userId }).countDocuments();
+
+    const maxPage = Math.ceil(totalLocations / limit);
+
     const locations = await Location.aggregate([
       { $match: { userId: userId } },
       { $sort: { _id: -1 } },
@@ -38,7 +42,7 @@ export default async (req: RequestWithUser, res: Response) => {
     return res.status(200).json({
       resultMessage: { en: getText("en", "00093") },
       resultCode: "00093",
-      page,
+      nextPage: page === maxPage ? 0 : page + 1,
       locations,
     });
   } catch (error) {
@@ -82,6 +86,8 @@ export default async (req: RequestWithUser, res: Response) => {
  *                              $ref: '#/components/schemas/ResultMessage'
  *                          resultCode:
  *                              $ref: '#/components/schemas/ResultCode'
+ *                          nextPage:
+ *                              type: number
  *                          locations:
  *                              type: array
  *                              items:
