@@ -7,15 +7,17 @@ export default async (req: RequestWithUser, res: Response) => {
   try {
     const userId = req.user._id;
 
-    // var locations = await Location.find(
-    //   { userId: userId },
-    //   "-__v -userId -updatedAt"
-    // ).sort({ _id: -1 });
+    let { limit, page } = req.body;
+
+    limit ??= 5; // Number of documents to fetch per request
+    page ??= 1;
+    const skip = (page - 1) * limit; // Calculate the offset based on the current page
 
     const locations = await Location.aggregate([
       { $match: { userId: userId } },
       { $sort: { _id: -1 } },
-      { $limit: 5 },
+      { $skip: skip },
+      { $limit: limit },
       {
         $addFields: {
           CapturedOn: { $toDate: "$createdAt" },
@@ -31,11 +33,14 @@ export default async (req: RequestWithUser, res: Response) => {
       },
     ]);
 
+    console.log(locations);
+
     logger("00093", req.user._id!, getText("en", "00093"), "Info", req);
 
     return res.status(200).json({
       resultMessage: { en: getText("en", "00093") },
       resultCode: "00093",
+      page,
       locations,
     });
   } catch (error) {
@@ -46,12 +51,27 @@ export default async (req: RequestWithUser, res: Response) => {
 /**
  * @swagger
  * /location/location-history:
- *    get:
+ *    post:
  *      summary: location history of the user
  *      security:
  *          - Authorization: []
  *      tags:
  *        - Location
+ *      requestBody:
+ *        description: Request body for pagination, specifying record limit and current page.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                limit:
+ *                  type: number
+ *                  nullable: true
+ *                  default: null
+ *                page:
+ *                  type: number
+ *                  nullable: true
+ *                  default: null
  *      responses:
  *        "200":
  *          description: All location history fetched successfully.

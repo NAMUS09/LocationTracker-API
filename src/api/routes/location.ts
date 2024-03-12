@@ -8,7 +8,7 @@ import { auth } from "../middlewares/index.js";
 const router = Router();
 
 // Protected Routes
-router.get(
+router.post(
   "/location-history",
   auth as unknown as RequestHandler,
   locationHistory as unknown as RequestHandler
