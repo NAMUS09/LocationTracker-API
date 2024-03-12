@@ -33,8 +33,6 @@ export default async (req: RequestWithUser, res: Response) => {
       },
     ]);
 
-    console.log(locations);
-
     logger("00093", req.user._id!, getText("en", "00093"), "Info", req);
 
     return res.status(200).json({
