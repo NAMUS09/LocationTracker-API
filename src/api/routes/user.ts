@@ -6,6 +6,7 @@ import {
   register,
 } from "../controllers/user/index.js";
 import { auth } from "../middlewares/index.js";
+import getUser from "../controllers/user/get-user.js";
 
 const router = Router();
 
@@ -23,7 +24,11 @@ router.post("/refresh-token", refreshToken as unknown as RequestHandler);
 // EDIT
 // router.post("/change-password", auth, changePassword);
 
-// router.get("/", auth, getUser);
+router.get(
+  "/",
+  auth as unknown as RequestHandler,
+  getUser as unknown as RequestHandler
+);
 // router.delete("/", auth, deleteUser);
 
 export default router;
