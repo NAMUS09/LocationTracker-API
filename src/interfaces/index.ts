@@ -1,2 +1,2 @@
 export { default as CustomError } from "./customError";
-export { default as RequestWithUser } from "./requestWithUser.interface";
+export { default as RequestWithUser } from "./requestWithUser.interface.js";

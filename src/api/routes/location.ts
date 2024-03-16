@@ -1,6 +1,9 @@
 import { RequestHandler, Router } from "express";
-import { locationHistory, saveLocation } from "../controllers/location/index";
-import { auth } from "../middlewares/index";
+import {
+  locationHistory,
+  saveLocation,
+} from "../controllers/location/index.js";
+import { auth } from "../middlewares/index.js";
 
 const router = Router();
 

@@ -1,19 +1,19 @@
-import { User, Token } from "../../../../models/index";
-import { validateLogin } from "../../../validators/user.validator";
+import { User, Token } from "../../../../models/index.js";
+import { validateLogin } from "../../../validators/user.validator.js";
 import {
   cookieAccessToken,
   cookieOptions,
   cookieRefreshToken,
-} from "../../../../config/index";
+} from "../../../../config/index.js";
 import {
   errorHelper,
   getText,
   logger,
   generateAccessAndRefereshTokens,
-} from "../../../../utils/index";
-import RequestWithUser from "../../../../interfaces/requestWithUser.interface";
+} from "../../../../utils/index.js";
+import RequestWithUser from "../../../../interfaces/requestWithUser.interface.js";
 import { Response } from "express";
-import { IUser } from "../../../../models/user.model";
+import { IUser } from "../../../../models/user.model.js";
 import {
   cookieClient,
   cookieClientOptions,

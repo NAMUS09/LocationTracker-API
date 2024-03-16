@@ -5,9 +5,9 @@ import {
   cookieOptions,
   cookieRefreshToken,
 } from "../../../../config/cookie.config";
-import RequestWithUser from "../../../../interfaces/requestWithUser.interface";
+import RequestWithUser from "../../../../interfaces/requestWithUser.interface.js";
 
-import { getText, logger, removeToken } from "../../../../utils/index";
+import { getText, logger, removeToken } from "../../../../utils/index.js";
 import { Response } from "express";
 
 export default async (req: RequestWithUser, res: Response) => {

@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
-import { User, Token } from "../../../models/index";
-import { errorHelper } from "../../../utils/index";
-import { jwtSecretKey } from "../../../config/index";
+import { User, Token } from "../../../models/index.js";
+import { errorHelper } from "../../../utils/index.js";
+import { jwtSecretKey } from "../../../config/index.js";
 import { Response, NextFunction } from "express";
-import { IUser } from "../../../models/user.model";
-import { RequestWithUser } from "../../../interfaces/index";
+import { IUser } from "../../../models/user.model.js";
+import { RequestWithUser } from "../../../interfaces/index.js";
 
 export default async (
   req: RequestWithUser,

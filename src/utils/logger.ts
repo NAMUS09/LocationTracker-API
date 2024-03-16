@@ -1,4 +1,4 @@
-import { Log } from "../models/index";
+import { Log } from "../models/index.js";
 import ipHelper from "./helpers/ip-helper";
 import { Request } from "express";
 

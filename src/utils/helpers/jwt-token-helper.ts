@@ -1,6 +1,6 @@
 import { Error } from "mongoose";
 import { Token, User } from "../../models";
-import { IUser } from "../../models/user.model";
+import { IUser } from "../../models/user.model.js";
 import logger from "../logger";
 
 const generateAccessAndRefereshTokens = async (userId: string) => {

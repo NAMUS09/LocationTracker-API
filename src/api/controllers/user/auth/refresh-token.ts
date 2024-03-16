@@ -1,23 +1,23 @@
-import { Token } from "../../../../models/index";
-import { validateRefreshToken } from "../../../validators/user.validator";
+import { Token } from "../../../../models/index.js";
+import { validateRefreshToken } from "../../../validators/user.validator.js";
 import {
   errorHelper,
   getText,
   ipHelper,
   generateAccessAndRefereshTokens,
   removeToken,
-} from "../../../../utils/index";
+} from "../../../../utils/index.js";
 import {
   cookieOptions,
   cookieAccessToken,
   cookieRefreshToken,
   refreshTokenSecretKey,
-} from "../../../../config/index";
+} from "../../../../config/index.js";
 import pkg from "jsonwebtoken";
 import { Response } from "express";
-import { IUser } from "../../../../models/user.model";
-import { IToken } from "../../../../models/token.model";
-import { RequestWithUser } from "../../../../interfaces/index";
+import { IUser } from "../../../../models/user.model.js";
+import { IToken } from "../../../../models/token.model.js";
+import { RequestWithUser } from "../../../../interfaces/index.js";
 import {
   cookieClient,
   cookieClientOptions,
