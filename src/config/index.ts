@@ -29,7 +29,7 @@ export const refreshTokenSecretKey = REFRESH_TOKEN_SECRET_KEY!;
 export const accessTokenExpiry = ACCESS_TOKEN_EXPIRY!;
 export const refreshTokenExpiry = REFRESH_TOKEN_EXPIRY!;
 export const dbUri = DB_URI!;
-export const appOrigin = APP_ORIGIN;
+export const appOrigin = APP_ORIGIN!;
 
 export const corsOptions: CorsOptions = {
   origin: APP_ORIGIN,
