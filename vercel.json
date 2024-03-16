@@ -3,7 +3,7 @@
   "name": "LocatioinTracker-API",
   "builds": [
     {
-      "src": "app.js",
+      "src": "dist/app.js",
       "use": "@vercel/node",
       "config": { "includeFiles": ["dist/**"] }
     }
