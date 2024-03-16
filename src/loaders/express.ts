@@ -56,7 +56,7 @@ export default (app: Express) => {
   });
 
   app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", appOrigin);
+    res.setHeader("Access-Control-Allow-Origin", req.headers.origin!);
     res.setHeader(
       "Access-Control-Allow-Headers",
       "Origin, X-Requested-With, Content-Type, Accept, Authorization"
