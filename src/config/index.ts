@@ -5,6 +5,7 @@ export {
   cookieRefreshToken,
 } from "./cookie.config.js";
 import { CorsOptions } from "cors";
+import { Domain } from "domain";
 import { config } from "dotenv";
 
 config();
