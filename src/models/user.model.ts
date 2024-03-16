@@ -6,7 +6,7 @@ import {
   jwtSecretKey,
   refreshTokenExpiry,
   refreshTokenSecretKey,
-} from "../config";
+} from "../config/index.js";
 
 const { Schema, model } = mongoose;
 
