@@ -1,7 +1,7 @@
 import userModel from "./user.model.js";
 import tokenModel from "./token.model.js";
-import logModel from "./log.model.";
 import locationModel from "./location.model.js";
+import logModel from "./log.model.js";
 
 export const User = userModel;
 export const Token = tokenModel;
