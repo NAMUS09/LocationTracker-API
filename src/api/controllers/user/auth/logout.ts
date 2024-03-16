@@ -4,10 +4,10 @@ import {
   cookieClientOptions,
   cookieOptions,
   cookieRefreshToken,
-} from "../../../../config/cookie.config.js";
-import RequestWithUser from "../../../../interfaces/requestWithUser.interface.js";
+} from "../../../../config/cookie.config";
+import RequestWithUser from "../../../../interfaces/requestWithUser.interface";
 
-import { getText, logger, removeToken } from "../../../../utils/index.js";
+import { getText, logger, removeToken } from "../../../../utils/index";
 import { Response } from "express";
 
 export default async (req: RequestWithUser, res: Response) => {

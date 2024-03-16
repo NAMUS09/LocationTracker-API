@@ -1,9 +1,9 @@
 import { Router } from "express";
 import swaggerJsdoc from "swagger-jsdoc";
 import { serve, setup } from "swagger-ui-express";
-import { specs, swaggerConfig } from "../../config/index.js";
-import user from "./user.js";
-import location from "./location.js";
+import { specs, swaggerConfig } from "../../config/index";
+import user from "./user";
+import location from "./location";
 
 const router = Router();
 

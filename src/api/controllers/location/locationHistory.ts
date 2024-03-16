@@ -1,6 +1,6 @@
-import RequestWithUser from "../../../interfaces/requestWithUser.interface.js";
-import { Location } from "../../../models/index.js";
-import { errorHelper, getText, logger } from "../../../utils/index.js";
+import RequestWithUser from "../../../interfaces/requestWithUser.interface";
+import { Location } from "../../../models/index";
+import { errorHelper, getText, logger } from "../../../utils/index";
 import { Response } from "express";
 
 export default async (req: RequestWithUser, res: Response) => {

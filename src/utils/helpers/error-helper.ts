@@ -1,6 +1,6 @@
-import logger from "../logger.js";
-import en from "../lang/en.js";
-import { RequestWithUser } from "../../interfaces/index.js";
+import logger from "../logger";
+import en from "../lang/en";
+import { RequestWithUser } from "../../interfaces/index";
 
 export default (
   code: string,

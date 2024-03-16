@@ -1,8 +1,8 @@
-import RequestWithUser from "../../../interfaces/requestWithUser.interface.js";
-import { Location } from "../../../models/index.js";
-import { ILocation } from "../../../models/location.model..js";
-import { errorHelper, getText, logger } from "../../../utils/index.js";
-import { validateLocation } from "../../validators/location.validator.js";
+import RequestWithUser from "../../../interfaces/requestWithUser.interface";
+import { Location } from "../../../models/index";
+import { ILocation } from "../../../models/location.model";
+import { errorHelper, getText, logger } from "../../../utils/index";
+import { validateLocation } from "../../validators/location.validator";
 import { Response } from "express";
 
 export default async (req: RequestWithUser, res: Response) => {

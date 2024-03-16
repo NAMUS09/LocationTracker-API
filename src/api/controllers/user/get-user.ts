@@ -1,7 +1,7 @@
 import { Response } from "express";
-import { User } from "../../../models/index.js";
-import { RequestWithUser } from "../../../interfaces/index.js";
-import { errorHelper, logger, getText } from "../../../utils/index.js";
+import { User } from "../../../models/index";
+import { RequestWithUser } from "../../../interfaces/index";
+import { errorHelper, logger, getText } from "../../../utils/index";
 
 export default async (req: RequestWithUser, res: Response) => {
   const user = await User.findById(req.user._id)

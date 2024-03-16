@@ -1,13 +1,13 @@
-import { User } from "../../../../models/index.js";
-import { validateRegister } from "../../../validators/user.validator.js";
+import { User } from "../../../../models/index";
+import { validateRegister } from "../../../validators/user.validator";
 import { Response } from "express";
 import {
   errorHelper,
   logger,
   getText,
   generateRandomCode,
-} from "../../../../utils/index.js";
-import RequestWithUser from "../../../../interfaces/requestWithUser.interface.js";
+} from "../../../../utils/index";
+import RequestWithUser from "../../../../interfaces/requestWithUser.interface";
 
 export default async (req: RequestWithUser, res: Response) => {
   const { error } = validateRegister(req.body);

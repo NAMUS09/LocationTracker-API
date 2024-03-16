@@ -5,13 +5,13 @@ import express, { Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
-import { appOrigin, corsOptions, prefix } from "../config/index.js";
-import routes from "../api/routes/index.js";
-import { logger } from "../utils/index.js";
-import { jwtSecretKey } from "../config/index.js";
-import { CustomError, RequestWithUser } from "../interfaces/index.js";
+import { appOrigin, corsOptions, prefix } from "../config/index";
+import routes from "../api/routes/index";
+import { logger } from "../utils/index";
+import { jwtSecretKey } from "../config/index";
+import { CustomError, RequestWithUser } from "../interfaces/index";
 import { Express } from "express";
-import errorHandler from "../middlewares/error.js";
+import errorHandler from "../middlewares/error";
 
 export default (app: Express) => {
   process.on("uncaughtException", async (error: Error) => {

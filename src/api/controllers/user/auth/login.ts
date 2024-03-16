@@ -1,23 +1,23 @@
-import { User, Token } from "../../../../models/index.js";
-import { validateLogin } from "../../../validators/user.validator.js";
+import { User, Token } from "../../../../models/index";
+import { validateLogin } from "../../../validators/user.validator";
 import {
   cookieAccessToken,
   cookieOptions,
   cookieRefreshToken,
-} from "../../../../config/index.js";
+} from "../../../../config/index";
 import {
   errorHelper,
   getText,
   logger,
   generateAccessAndRefereshTokens,
-} from "../../../../utils/index.js";
-import RequestWithUser from "../../../../interfaces/requestWithUser.interface.js";
+} from "../../../../utils/index";
+import RequestWithUser from "../../../../interfaces/requestWithUser.interface";
 import { Response } from "express";
-import { IUser } from "../../../../models/user.model.js";
+import { IUser } from "../../../../models/user.model";
 import {
   cookieClient,
   cookieClientOptions,
-} from "../../../../config/cookie.config.js";
+} from "../../../../config/cookie.config";
 
 export default async (req: RequestWithUser, res: Response) => {
   const { error } = validateLogin(req.body);

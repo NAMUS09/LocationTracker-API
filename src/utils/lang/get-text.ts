@@ -1,4 +1,4 @@
-import en from "./en.js";
+import en from "./en";
 
 export default (lang: string, key: string) => {
   if (lang == "en") {

@@ -1,27 +1,27 @@
-import { Token } from "../../../../models/index.js";
-import { validateRefreshToken } from "../../../validators/user.validator.js";
+import { Token } from "../../../../models/index";
+import { validateRefreshToken } from "../../../validators/user.validator";
 import {
   errorHelper,
   getText,
   ipHelper,
   generateAccessAndRefereshTokens,
   removeToken,
-} from "../../../../utils/index.js";
+} from "../../../../utils/index";
 import {
   cookieOptions,
   cookieAccessToken,
   cookieRefreshToken,
   refreshTokenSecretKey,
-} from "../../../../config/index.js";
+} from "../../../../config/index";
 import pkg from "jsonwebtoken";
 import { Response } from "express";
-import { IUser } from "../../../../models/user.model.js";
-import { IToken } from "../../../../models/token.model.js";
+import { IUser } from "../../../../models/user.model";
+import { IToken } from "../../../../models/token.model";
 import { RequestWithUser } from "../../../../interfaces/index";
 import {
   cookieClient,
   cookieClientOptions,
-} from "../../../../config/cookie.config.js";
+} from "../../../../config/cookie.config";
 
 const { verify } = pkg;
 

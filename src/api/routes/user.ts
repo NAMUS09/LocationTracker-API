@@ -4,9 +4,9 @@ import {
   logout,
   refreshToken,
   register,
-} from "../controllers/user/index.js";
-import { auth } from "../middlewares/index.js";
-import getUser from "../controllers/user/get-user.js";
+} from "../controllers/user/index";
+import { auth } from "../middlewares/index";
+import getUser from "../controllers/user/get-user";
 
 const router = Router();
 

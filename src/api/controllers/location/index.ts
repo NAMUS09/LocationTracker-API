@@ -1,2 +1,2 @@
-export { default as locationHistory } from "./locationHistory.js";
-export { default as saveLocation } from "./saveLocation.js";
+export { default as locationHistory } from "./locationHistory";
+export { default as saveLocation } from "./saveLocation";

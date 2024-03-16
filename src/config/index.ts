@@ -1,9 +1,9 @@
-export { default as swaggerConfig } from "./swagger.config.js";
+export { default as swaggerConfig } from "./swagger.config";
 export {
   cookieOptions,
   cookieAccessToken,
   cookieRefreshToken,
-} from "./cookie.config.js";
+} from "./cookie.config";
 import { CorsOptions } from "cors";
 import { config } from "dotenv";
 
