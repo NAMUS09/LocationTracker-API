@@ -1,6 +1,6 @@
 import { ErrorRequestHandler, NextFunction, Response } from "express";
-import { logger } from "../utils";
-import { RequestWithUser } from "../interfaces";
+import { logger } from "../utils/index.js";
+import { RequestWithUser } from "../interfaces/index.js";
 
 export const errorHandler = <ErrorRequestHandler>(
   function (error, req: RequestWithUser, res: Response, next: NextFunction) {
