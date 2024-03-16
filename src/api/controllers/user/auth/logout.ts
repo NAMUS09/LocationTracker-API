@@ -4,7 +4,7 @@ import {
   cookieClientOptions,
   cookieOptions,
   cookieRefreshToken,
-} from "../../../../config/cookie.config";
+} from "../../../../config/cookie.config.js";
 import RequestWithUser from "../../../../interfaces/requestWithUser.interface.js";
 
 import { getText, logger, removeToken } from "../../../../utils/index.js";
