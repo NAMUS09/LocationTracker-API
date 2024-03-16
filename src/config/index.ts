@@ -32,7 +32,7 @@ export const dbUri = DB_URI!;
 export const appOrigin = APP_ORIGIN!;
 
 export const corsOptions: CorsOptions = {
-  origin: APP_ORIGIN,
+  origin: appOrigin,
   credentials: true,
 };
 

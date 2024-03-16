@@ -41,22 +41,8 @@ export default (app: Express) => {
   app.disable("x-powered-by");
   app.disable("etag");
 
-  app.use(prefix, routes);
-
-  app.get("/", (_req: Request, res: Response) => {
-    return res
-      .status(200)
-      .json({
-        resultMessage: {
-          en: "Project is successfully working...",
-        },
-        resultCode: "00004",
-      })
-      .end();
-  });
-
   app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", req.headers.origin!);
+    res.setHeader("Access-Control-Allow-Origin", appOrigin);
     res.setHeader(
       "Access-Control-Allow-Headers",
       "Origin, X-Requested-With, Content-Type, Accept, Authorization"
@@ -75,6 +61,20 @@ export default (app: Express) => {
     }
     next();
   });
+
+  app.get("/", (_req: Request, res: Response) => {
+    return res
+      .status(200)
+      .json({
+        resultMessage: {
+          en: "Project is successfully working...",
+        },
+        resultCode: "00004",
+      })
+      .end();
+  });
+
+  app.use(prefix, routes);
 
   app.use((_req: Request, _res: Response, next: NextFunction) => {
     const error = new Error("Endpoint could not find!") as CustomError;
