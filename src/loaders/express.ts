@@ -33,7 +33,7 @@ export default (app: Express) => {
   app.use(cors(corsOptions));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-  app.use(morgan("dev"));
+  app.use(morgan("combined"));
   app.use(helmet());
   app.use(compression());
   app.use(express.static("public"));
