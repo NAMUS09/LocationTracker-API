@@ -21,7 +21,7 @@ import { RequestWithUser } from "../../../../interfaces/index.js";
 import {
   cookieClient,
   cookieClientOptions,
-} from "../../../../config/cookie.config";
+} from "../../../../config/cookie.config.js";
 
 const { verify } = pkg;
 

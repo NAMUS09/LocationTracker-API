@@ -1,1 +1,1 @@
-export { default as auth } from "./auth/auth.middleware";
+export { default as auth } from "./auth/auth.middleware.js";
