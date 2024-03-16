@@ -6,7 +6,7 @@ import {
   register,
 } from "../controllers/user/index.js";
 import { auth } from "../middlewares/index.js";
-import getUser from "../controllers/user/get-user";
+import getUser from "../controllers/user/get-user.js";
 
 const router = Router();
 
