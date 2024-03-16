@@ -17,7 +17,7 @@ import { IUser } from "../../../../models/user.model.js";
 import {
   cookieClient,
   cookieClientOptions,
-} from "../../../../config/cookie.config";
+} from "../../../../config/cookie.config.js";
 
 export default async (req: RequestWithUser, res: Response) => {
   const { error } = validateLogin(req.body);
