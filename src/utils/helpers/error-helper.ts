@@ -1,5 +1,5 @@
-import logger from "../logger";
-import en from "../lang/en";
+import logger from "../logger.js";
+import en from "../lang/en.js";
 import { RequestWithUser } from "../../interfaces/index.js";
 
 export default (
