@@ -1,5 +1,5 @@
 import { Log } from "../models/index.js";
-import ipHelper from "./helpers/ip-helper";
+import ipHelper from "./helpers/ip-helper.js";
 import { Request } from "express";
 
 export default async (
