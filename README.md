@@ -17,21 +17,29 @@ To install and run the Location Tracker API locally, follow these steps:
 
 1. Clone the repository:
 
-git clone https://github.com/NAMUS09/LocationTracker-API.git
+```bash
+    git clone https://github.com/NAMUS09/LocationTracker-API.git
+```
 
 2. Navigate to the project directory:
 
-cd LocationTracker-API
+```bash
+    cd LocationTracker-API
+```
 
 3. Install dependencies:
 
-npm install
+```bash
+    npm install
+```
 
 4. Prepare the environment variables by generating a `.env` file similar to the provided `.env.sample` file.
 
 5. Start the API:
 
-npm start
+```bash
+    npm start
+```
 
 ## Contributing
 
